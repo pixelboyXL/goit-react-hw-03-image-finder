@@ -43,6 +43,7 @@ img {
 @import './components/ImageGallery/ImageGallery.module.css';
 @import './components/Modal/Modal.module.css';
 @import './components/Button/Button.module.css';
+@import './components/ErrorImg/ErrorImg.module.css';
 
 /*
  * Стили компонента App
@@ -59,6 +60,5 @@ img {
  */
 .MagnifyingGlass-wrapper {
   display: block;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto;
 }

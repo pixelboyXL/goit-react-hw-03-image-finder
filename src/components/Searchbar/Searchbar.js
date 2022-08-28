@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export class Searchbar extends Component {
     static propTypes = {
-        searchImages: PropTypes.func.isRequired,
+        onSubmit: PropTypes.func.isRequired,
         toastInfo: PropTypes.func.isRequired,
     };
     
@@ -19,12 +19,12 @@ export class Searchbar extends Component {
     };
     onSubmitForm = (event) => {
         event.preventDefault();
-        const { searchImages, toastInfo } = this.props;
+        const { onSubmit, toastInfo } = this.props;
         const { text } = this.state;
         if (text.trim() === '') {
             return toastInfo();
         };
-        searchImages(text);
+        onSubmit(text);
         this.reset();
     };
     reset = () => {

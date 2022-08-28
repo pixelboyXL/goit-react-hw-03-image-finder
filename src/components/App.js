@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { fetchImages } from "./services/fetchImages";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
+import { ErrorImg } from "./ErrorImg/ErrorImg";
 
 const toastSettings = {
   theme: "colored",
@@ -15,6 +16,7 @@ export class App extends Component {
     page: 1,
     images: [],
     loading: false,
+    isError: false,
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -27,16 +29,21 @@ export class App extends Component {
         const result = await fetchImages(text, page);
         if (result.totalHits === 0) {
           this.toastWarn();
+          return this.setState({
+            loading: false,
+            isError: true,
+          });
+        };
+        if (page === 1 && result.hits.length > 1) {
+          this.toastSuccess();
         };
         this.setState(prevState => ({
           images: [...prevState.images, ...result.hits],
           loading: false,
+          isError: false,
         }));
-        if (page === 1 && result.hits.length > 1) {
-          return this.toastSuccess();
-        };
       } catch (error) {
-        this.toastError();
+        return this.toastError();
       };
     };
   };
@@ -54,8 +61,6 @@ export class App extends Component {
   loadMoreImages = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
-      images: [...prevState.images],
-      loading: true,
     }));
   };
   toastSuccess = () => {
@@ -75,12 +80,15 @@ export class App extends Component {
   };
 
   render() {
-    const { images, loading } = this.state;
+    const { images, loading, isError } = this.state;
     return (
       <>
-        <Searchbar searchImages={this.searchImages} toastInfo={this.toastInfoNothing}/>
-        <ImageGallery allImages={images} loading={loading} loadMoreImages={this.loadMoreImages} />
-        <ToastContainer autoClose={3000}/>
+        <Searchbar onSubmit={this.searchImages} toastInfo={this.toastInfoNothing} />
+        {isError === true
+          ? <ErrorImg />
+          : <ImageGallery allImages={images} loading={loading} loadMoreImages={this.loadMoreImages} />
+        }
+        <ToastContainer autoClose={3000} />
       </>
     );
   };
