@@ -1,4 +1,6 @@
-export const Modal = ({src, alt, closeModal}) => {
+import PropTypes from 'prop-types';
+
+export const Modal = ({ src, alt, closeModal }) => {
     return (
         <div className="Overlay" onClick={closeModal}>
             <div className="Modal">
@@ -6,4 +8,10 @@ export const Modal = ({src, alt, closeModal}) => {
             </div>
         </div>
     );
+};
+
+Modal.propTypes = {
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    closeModal: PropTypes.func.isRequired,
 };

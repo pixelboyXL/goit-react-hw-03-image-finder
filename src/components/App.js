@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { MagnifyingGlass } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchImages } from "./services/fetchImages";
@@ -30,9 +29,12 @@ export class App extends Component {
           this.toastWarn();
         };
         this.setState(prevState => ({
-        images: [...prevState.images, ...result.hits],
-        loading: false,
-      }));
+          images: [...prevState.images, ...result.hits],
+          loading: false,
+        }));
+        if (page === 1 && result.hits.length > 1) {
+          return this.toastSuccess();
+        };
       } catch (error) {
         this.toastError();
       };
@@ -40,6 +42,9 @@ export class App extends Component {
   };
 
   searchImages = text => {
+    if (this.state.text === text.trim()) {
+      return this.toastInfoDuplication();
+    };
     this.setState({
       text,
       page: 1,
@@ -53,32 +58,28 @@ export class App extends Component {
       loading: true,
     }));
   };
-  toastInfo = () => {
-    return toast.info("It looks like you want to find nothing, please check your query", toastSettings);
+  toastSuccess = () => {
+    return toast.success("Hooray! We found what you were looking for 🤗", toastSettings);
+  };
+  toastInfoNothing = () => {
+    return toast.info("It looks like you want to find nothing, please check your query 😕", toastSettings);
+  };
+  toastInfoDuplication = () => {
+    return toast.info("It looks like there are already pictures found for your request, please check if this will be a new search 🤔", toastSettings); 
   };
   toastWarn = () => {
-    return toast.warn("Sorry, nothing was found for your request, try something else", toastSettings);
+    return toast.warn("Sorry, nothing was found for your request, try something else 🙈", toastSettings); 
   };
   toastError = () => {
-    return toast.error("Oops, something went wrong, please try again", toastSettings);
+    return toast.error("Oops, something went wrong, please try again 🙊", toastSettings);
   };
 
   render() {
     const { images, loading } = this.state;
     return (
       <>
-        <Searchbar searchImages={this.searchImages} toastInfo={this.toastInfo}/>
-        <ImageGallery allImages={images} loadMoreImages={this.loadMoreImages} />
-        <MagnifyingGlass
-          visible={loading}
-          height="80"
-          width="80"
-          ariaLabel="MagnifyingGlass-loading"
-          wrapperStyle={{}}
-          wrapperClass="MagnifyingGlass-wrapper"
-          glassColor = '#c0efff'
-          color = '#e15b64'
-        />
+        <Searchbar searchImages={this.searchImages} toastInfo={this.toastInfoNothing}/>
+        <ImageGallery allImages={images} loading={loading} loadMoreImages={this.loadMoreImages} />
         <ToastContainer autoClose={3000}/>
       </>
     );
