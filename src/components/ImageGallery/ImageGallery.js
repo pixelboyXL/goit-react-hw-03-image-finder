@@ -23,7 +23,7 @@ export const ImageGallery = ({ allImages, loading, ...otherProps }) => {
                     glassColor = '#c0efff'
                     color='#3f51b5'
                 />
-                : allImages.length > 0 && <Button {...otherProps} />}
+                : allImages.length > 0 && <Button text="Load more" type="button" {...otherProps} />}
         </section>
     );
 };
