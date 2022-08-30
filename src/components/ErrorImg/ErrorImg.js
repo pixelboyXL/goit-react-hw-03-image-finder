@@ -1,9 +1,11 @@
-import img from 'components/images/Best-Coming-Soon-and-404-Error-Page-Templates-for-Your-Unique-Websites.jpg';
+import PropTypes from 'prop-types';
 
-export const ErrorImg = () => {
+export const ErrorImg = ({ errorImg }) => {
     return (
-        <>
-            <img className="ErrorImg" src={img} alt="Wow dude, try one more time" />
-        </>
+        <img className="ErrorImg" src={errorImg} alt="Wow dude, try one more time" />
     );
+};
+
+ErrorImg.propTypes = {
+    errorImg: PropTypes.string.isRequired,
 };
