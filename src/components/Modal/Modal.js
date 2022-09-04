@@ -2,6 +2,14 @@ import PropTypes from 'prop-types';
 import { Component } from 'react';
 
 export class Modal extends Component {
+    static propTypes = {
+        data: PropTypes.shape({
+            source: PropTypes.string.isRequired,
+            alt: PropTypes.string.isRequired,
+        }).isRequired,
+        onToggleModal: PropTypes.func.isRequired,
+    };
+
     componentDidMount() {
         const { onToggleModal } = this.props;
         window.addEventListener("keydown", onToggleModal);
@@ -21,12 +29,4 @@ export class Modal extends Component {
             </div>
         );
     };
-};
-
-Modal.propTypes = {
-    data: PropTypes.shape({
-        source: PropTypes.string.isRequired,
-        alt: PropTypes.string.isRequired,
-    }).isRequired,
-    onToggleModal: PropTypes.func.isRequired,
 };
